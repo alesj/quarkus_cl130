@@ -1,0 +1,13 @@
+target/
+.project
+.settings
+.classpath
+.DS_Store
+
+# IntelliJ / IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+/out/
+/.mavenrc.override
