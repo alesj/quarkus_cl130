@@ -23,7 +23,7 @@ public class TestResourceImpl implements TestResource {
     public String info() {
         SessionFactory sf = registry.sessionFactory();
         try (Session session = sf.openSession()) {
-            Query<TableModCount> query = session.createQuery("SELECT tmc FROM TableModCount", TableModCount.class);
+            Query<TableModCount> query = session.createQuery("SELECT tmc FROM TableModCount tmc", TableModCount.class);
             query.getResultList();
         }
         return "Quarkus CL issue";
