@@ -1,36 +1,26 @@
 package com.alesj.qcl.app;
 
-import com.alesj.qcl.engine.TablesRegistry;
-import com.alesj.qcl.engine.hibernate.CustomH2Dialect;
-import com.alesj.qcl.engine.hibernate.HibernateTablesRegistry;
-import io.quarkus.hibernate.orm.runtime.customized.QuarkusJtaPlatform;
-import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
-import javax.sql.DataSource;
+import javax.inject.Singleton;
 
 /**
  * @author Ales Justin
  */
 @ApplicationScoped
 public class QCLAppConfiguration {
-
     @Produces
-    @ApplicationScoped
-    public TablesRegistry tablesRegistry(Instance<DataSource> dataSource) {
-        return new HibernateTablesRegistry(
-            dataSource.get(),
-            QuarkusJtaPlatform.INSTANCE,
-            CustomH2Dialect.class,
-            k -> 42
-        );
+    @Singleton
+    public Logger logger() {
+        return LoggerFactory.getLogger(QCLAppConfiguration.class);
     }
 
-    public void destroy(@Observes ShutdownEvent event, TablesRegistry registry) throws Exception {
-        registry.close();
+    public void start(@Observes StartupEvent event, Logger logger) {
+        logger.info("Started ...");
     }
-
 }

@@ -18,10 +18,10 @@
     </modules>
 
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <quarkus.version>999-SNAPSHOT</quarkus.version>
-        <jandex.version>1.0.7</jandex.version>
+        <quarkus.version>2.5.1.Final</quarkus.version>
+        <jandex.version>1.2.1</jandex.version>
         <!-- Plugins -->
         <version.compiler.plugin>3.8.1</version.compiler.plugin>
         <version.dependency.plugin>3.1.1</version.dependency.plugin>

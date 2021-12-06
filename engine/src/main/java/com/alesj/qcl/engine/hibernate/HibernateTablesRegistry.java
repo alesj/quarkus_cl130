@@ -25,7 +25,7 @@ import javax.sql.DataSource;
 public class HibernateTablesRegistry implements TablesRegistry {
     private final DataSource dataSource;
     private final JtaPlatform jtaPlatform;
-    private final Class<? extends Dialect> dialect;
+    private final Class<? extends Dialect> dialectClass;
     private final Function<?, ?> registerFn;
 
     private SessionFactory sessionFactory;
@@ -33,12 +33,12 @@ public class HibernateTablesRegistry implements TablesRegistry {
     public <D extends Dialect> HibernateTablesRegistry(
         DataSource dataSource,
         JtaPlatform jtaPlatform,
-        Class<D> dialect,
+        Class<D> dialectClass,
         Function<?, ?> registerFn
     ) {
         this.dataSource = Objects.requireNonNull(dataSource, "dataSource");
         this.jtaPlatform = Objects.requireNonNull(jtaPlatform, "jtaPlatform");
-        this.dialect = Objects.requireNonNull(dialect, "dialect");
+        this.dialectClass = Objects.requireNonNull(dialectClass, "dialectClass");
         this.registerFn = Objects.requireNonNull(registerFn, "registerFn");
     }
 
@@ -51,14 +51,16 @@ public class HibernateTablesRegistry implements TablesRegistry {
     }
 
     protected synchronized void start() {
+        ClassLoader classLoader = registerFn.getClass().getClassLoader();
+        System.out.println("classLoader = " + classLoader);
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
             .applySetting(AvailableSettings.DATASOURCE, dataSource)
             .applySetting(AvailableSettings.TRANSACTION_COORDINATOR_STRATEGY, "jta")
             .applySetting(AvailableSettings.JTA_PLATFORM, jtaPlatform)
             .applySetting(AvailableSettings.HBM2DDL_AUTO, Action.CREATE_ONLY)
-            .applySetting(AvailableSettings.DIALECT, dialect.getName())
+            .applySetting(AvailableSettings.DIALECT, dialectClass)
             .applySetting(AvailableSettings.TC_CLASSLOADER, TcclLookupPrecedence.NEVER)
-            .addService(ClassLoaderService.class, new ClassLoaderServiceImpl(registerFn.getClass().getClassLoader()))
+            .addService(ClassLoaderService.class, new ClassLoaderServiceImpl(classLoader))
             .build();
 
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
