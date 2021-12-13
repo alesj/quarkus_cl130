@@ -8,6 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
+import java.util.function.Supplier;
 
 /**
  * @author Ales Justin
@@ -22,5 +23,11 @@ public class QCLAppConfiguration {
 
     public void start(@Observes StartupEvent event, Logger logger) {
         logger.info("Started ...");
+    }
+
+    @Produces
+    @Singleton
+    public Supplier<R<String>> r() {
+        return () -> new R<>("foobar");
     }
 }
