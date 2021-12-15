@@ -20,6 +20,10 @@
             <artifactId>quarkus-arc</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc-deployment</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alesj</groupId>
             <artifactId>qcl-common</artifactId>
         </dependency>
