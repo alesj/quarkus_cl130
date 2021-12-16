@@ -23,6 +23,7 @@ public class QCLAppConfiguration {
         try {
             System.out.println("event = " + service.fact(CatType.sphynx));
         } catch (ConstraintViolationException ignored) {
+            System.out.println(ignored);
         }
     }
 }
