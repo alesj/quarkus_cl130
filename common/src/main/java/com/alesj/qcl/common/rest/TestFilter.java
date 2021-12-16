@@ -13,7 +13,7 @@ import java.io.IOException;
  * @author Ales Justin
  */
 @ApplicationScoped
-@Provider
+//@Provider
 //@Unremovable
 public class TestFilter implements ClientRequestFilter {
 
