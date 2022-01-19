@@ -8,20 +8,20 @@ import java.lang.reflect.Type;
 /**
  * @author Ales Justin
  */
-public class CTypeConverterProvider implements ParamConverterProvider {
+public class InputParamConverterProvider implements ParamConverterProvider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-        if (CType.class.equals(rawType)) {
-            return (ParamConverter<T>) new ParamConverter<CType>() {
+        if (rawType == Input.class) {
+            return (ParamConverter<T>) new ParamConverter<Input>() {
                 @Override
-                public CType fromString(String value) {
-                    return null;
+                public Input fromString(String value) {
+                    return new Input(value);
                 }
 
                 @Override
-                public String toString(CType value) {
-                    return value.getType();
+                public String toString(Input value) {
+                    return value.value;
                 }
             };
         }

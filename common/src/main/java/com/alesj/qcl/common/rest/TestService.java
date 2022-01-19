@@ -3,20 +3,30 @@ package com.alesj.qcl.common.rest;
 import org.eclipse.microprofile.rest.client.annotation.RegisterProvider;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Ales Justin
  */
 @RegisterRestClient(configKey = "qcltest")
-@RegisterProvider(RequestFilter.class)
-@RegisterProvider(CTypeConverterProvider.class)
+@RegisterProvider(InputParamConverterProvider.class)
 public interface TestService {
-    @GET
-    @Path("/{type}")
+    @POST
+    @Path("/form")
+    @Consumes("application/x-www-form-urlencoded")
     Fact fact(
-        @PathParam("type") CType type
+        @FormParam("input") Input input
+    );
+
+    @POST
+    @Path("/forms")
+    @Consumes("application/x-www-form-urlencoded")
+    List<Fact> facts(
+        @FormParam("inputs") Set<Input> inputs
     );
 }
