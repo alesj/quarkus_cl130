@@ -3,14 +3,15 @@ package com.alesj.qcl.common.rest;
 /**
  * @author Ales Justin
  */
-public class Input {
-    public String value;
+public class Input implements AutoCloseable {
+    private boolean closed;
 
-    public Input(String value) {
-        this.value = value;
+    public boolean closed() {
+        return closed;
     }
 
-    public Input fromString(String string) {
-        return new Input(string);
+    @Override
+    public void close() {
+        closed = true;
     }
 }

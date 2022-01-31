@@ -1,32 +1,26 @@
 package com.alesj.qcl.test;
 
-import com.alesj.qcl.common.rest.Fact;
 import com.alesj.qcl.common.rest.Input;
-import com.alesj.qcl.common.rest.TestService;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Set;
+import javax.inject.Named;
 
 /**
  * @author Ales Justin
  */
 @QuarkusTest
+@QuarkusTestResource(SimpleTestResource.class)
 public class SimpleTest {
 
     @Inject
-    @RestClient
-    TestService service;
+    @Named("myInput")
+    Input input;
 
     @Test
     public void testSmoke() {
-        Fact fact = service.fact(new Input("foobar"));
-        System.out.println("fact = " + fact);
-
-        List<Fact> facts = service.facts(Set.of(new Input("foobar"), new Input("baz")));
-        System.out.println("facts = " + facts);
+        SimpleTestResource.input = input;
     }
 }
