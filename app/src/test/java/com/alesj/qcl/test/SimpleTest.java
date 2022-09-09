@@ -1,26 +1,29 @@
 package com.alesj.qcl.test;
 
-import com.alesj.qcl.common.rest.Input;
-import io.quarkus.test.common.QuarkusTestResource;
+import examples.GreeterGrpc;
+import examples.HelloReply;
+import examples.HelloRequest;
+import io.grpc.ManagedChannel;
+import io.grpc.netty.NettyChannelBuilder;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * @author Ales Justin
  */
 @QuarkusTest
-@QuarkusTestResource(SimpleTestResource.class)
 public class SimpleTest {
-
-    @Inject
-    @Named("myInput")
-    Input input;
 
     @Test
     public void testSmoke() {
-        SimpleTestResource.input = input;
+        ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", 8081).build();
+        try {
+            GreeterGrpc.GreeterBlockingStub client = GreeterGrpc.newBlockingStub(channel);
+            HelloReply reply = client
+                .sayHello(HelloRequest.newBuilder().setName("neo-blocking").build());
+            System.out.println("reply = " + reply);
+        } finally {
+            channel.shutdown();
+        }
     }
 }
