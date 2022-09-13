@@ -6,6 +6,10 @@ import examples.HelloRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.NettyChannelBuilder;
 import io.quarkus.test.junit.QuarkusTest;
+import io.vertx.core.Vertx;
+import io.vertx.core.net.SocketAddress;
+import io.vertx.grpc.client.GrpcClient;
+import io.vertx.grpc.client.GrpcClientChannel;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -24,6 +28,24 @@ public class SimpleTest {
             System.out.println("reply = " + reply);
         } finally {
             channel.shutdown();
+        }
+    }
+
+    @Test
+    public void testNewSmoke() {
+        Vertx vertx = Vertx.vertx();
+        try {
+            GrpcClient client = GrpcClient.client(vertx);
+            try {
+                GrpcClientChannel channel = new GrpcClientChannel(client, SocketAddress.inetSocketAddress(8081, "localhost"));
+                GreeterGrpc.GreeterBlockingStub stub = GreeterGrpc.newBlockingStub(channel);
+                HelloReply reply = stub.sayHello(HelloRequest.newBuilder().setName("neo-blocking").build());
+                System.out.println("reply = " + reply);
+            } finally {
+                client.close().onComplete(System.out::println);
+            }
+        } finally {
+            vertx.close();
         }
     }
 }
