@@ -18,17 +18,17 @@
     </modules>
 
     <properties>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- quarkus.version>2.12.1.Final</quarkus.version -->
         <quarkus.version>999-SNAPSHOT</quarkus.version>
-        <jandex.version>1.2.1</jandex.version>
+        <jandex.version>1.2.3</jandex.version>
         <!-- Plugins -->
         <version.compiler.plugin>3.8.1</version.compiler.plugin>
         <version.dependency.plugin>3.1.1</version.dependency.plugin>
         <version.deploy.plugin>2.8.2</version.deploy.plugin>
         <version.docker.plugin>0.32.0</version.docker.plugin>
-        <version.failsafe.plugin>2.22.2</version.failsafe.plugin>
+        <version.failsafe.plugin>3.0.0-M7</version.failsafe.plugin>
         <version.jar.plugin>3.2.0</version.jar.plugin>
         <version.javadoc.plugin>3.1.0</version.javadoc.plugin>
         <version.properties.plugin>1.0.0</version.properties.plugin>
