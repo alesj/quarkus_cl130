@@ -4,12 +4,20 @@ import examples.GreeterGrpc;
 import examples.HelloReply;
 import examples.HelloRequest;
 import io.grpc.ManagedChannel;
+import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.net.PemTrustOptions;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.grpc.client.GrpcClient;
 import io.vertx.grpc.client.GrpcClientChannel;
 import org.junit.jupiter.api.Test;
+
+import java.io.InputStream;
 
 /**
  * @author Ales Justin
@@ -23,9 +31,14 @@ public abstract class SimpleTestBase {
     abstract void close(Vertx vertx);
 
     @Test
-    public void testSmoke() {
+    public void testSmoke() throws Exception {
+        SslContextBuilder builder = GrpcSslContexts.forClient();
+        builder.trustManager(getClass().getClassLoader().getResourceAsStream("tls/ca.pem"));
+        SslContext context = builder.build();
+
         ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", port())
-            .usePlaintext()
+            //.usePlaintext()
+            .sslContext(context)
             .build();
         try {
             GreeterGrpc.GreeterBlockingStub client = GreeterGrpc.newBlockingStub(channel);
@@ -38,10 +51,16 @@ public abstract class SimpleTestBase {
     }
 
     @Test
-    public void testNewSmoke() {
+    public void testNewSmoke() throws Exception {
         Vertx vertx = vertx();
         try {
-            GrpcClient client = GrpcClient.client(vertx);
+            HttpClientOptions options = new HttpClientOptions();
+            Buffer buffer;
+            try (InputStream stream = getClass().getClassLoader().getResourceAsStream("tls/ca.pem")) {
+                buffer = Buffer.buffer(stream.readAllBytes());
+            }
+            options.setTrustOptions(new PemTrustOptions().addCertValue(buffer));
+            GrpcClient client = GrpcClient.client(vertx, options);
             try {
                 GrpcClientChannel channel = new GrpcClientChannel(client, SocketAddress.inetSocketAddress(port(), "localhost"));
                 GreeterGrpc.GreeterBlockingStub stub = GreeterGrpc.newBlockingStub(channel);

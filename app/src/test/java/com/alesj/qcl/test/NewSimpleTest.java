@@ -11,6 +11,6 @@ import io.quarkus.test.junit.TestProfile;
 public class NewSimpleTest extends ManagedSimpleTestBase {
     @Override
     int port() {
-        return 8081;
+        return 8443;
     }
 }
