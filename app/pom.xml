@@ -25,6 +25,11 @@
             <artifactId>vertx-grpc-server</artifactId>
             <version>4.3.4-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-grpc-common</artifactId>
+            <version>4.3.4-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
