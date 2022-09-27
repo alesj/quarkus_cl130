@@ -12,7 +12,7 @@ import io.vertx.core.Vertx;
 public class NewSimpleIT extends SimpleTestBase {
     @Override
     int port() {
-        return 8081;
+        return 8444;
     }
 
     @Override

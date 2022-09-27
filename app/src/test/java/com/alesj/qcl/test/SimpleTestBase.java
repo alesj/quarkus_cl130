@@ -55,6 +55,8 @@ public abstract class SimpleTestBase {
         Vertx vertx = vertx();
         try {
             HttpClientOptions options = new HttpClientOptions();
+            options.setUseAlpn(true);
+            options.setSsl(true);
             Buffer buffer;
             try (InputStream stream = getClass().getClassLoader().getResourceAsStream("tls/ca.pem")) {
                 buffer = Buffer.buffer(stream.readAllBytes());
