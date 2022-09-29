@@ -1,64 +1,53 @@
 package com.alesj.qcl.test;
 
-import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.specification.RequestSpecification;
+import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.net.impl.KeyStoreHelper;
-import org.junit.jupiter.api.AfterAll;
+import io.vertx.core.net.PemKeyCertOptions;
+import io.vertx.core.net.PemTrustOptions;
+import io.vertx.ext.web.client.HttpRequest;
+import io.vertx.ext.web.client.HttpResponse;
+import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.client.WebClientOptions;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.inject.Inject;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.KeyStore;
-import java.util.List;
-
-import static io.restassured.RestAssured.given;
+import java.util.concurrent.TimeUnit;
 
 @QuarkusTest
 @TestProfile(NewVertxGrpcTestProfile.class)
 class EndpointTest {
 
-    @TestHTTPResource(value = "/hello/blocking/neo", ssl = true)
-    URL url;
-
-    @BeforeAll
-    public static void setupRestAssured() {
-        RestAssured.useRelaxedHTTPSValidation();
-    }
-
-    @AfterAll
-    public static void restoreRestAssured() {
-        RestAssured.reset();
-    }
+    @Inject
+    Vertx vertx;
 
     @Test
     public void testHelloWorldServiceUsingBlockingStub() throws Exception {
-        KeyStore ts = KeyStoreHelper.loadKeyCert(
-            List.of(buffer("/Users/alesj/projects/redhat/quarkus/integration-tests/grpc-mutual-auth/src/main/resources/tls/client.key")),
-            List.of(buffer("/Users/alesj/projects/redhat/quarkus/integration-tests/grpc-mutual-auth/src/main/resources/tls/client.pem"))
+        WebClientOptions options = new WebClientOptions();
+        options.setSsl(true);
+        options.setUseAlpn(true);
+        options.setTrustOptions(new PemTrustOptions().addCertValue(buffer("tls/ca.pem")));
+        options.setKeyCertOptions(
+            new PemKeyCertOptions()
+                .setKeyValue(buffer("tls/client.key"))
+                .setCertValue(buffer("tls/client.pem"))
         );
-
-        RequestSpecification spec = new RequestSpecBuilder()
-            .setTrustStore(ts)
-            .setKeyStore("/Users/alesj/projects/redhat/quarkus/integration-tests/grpc-mutual-auth/src/main/resources/tls/ca.pem", "123456")
-            .build();
-
-        String response = given().spec(spec).get(url).asString();
+        WebClient client = WebClient.create(vertx, options);
+        HttpRequest<Buffer> request = client.get(8444, "localhost", "/hello/blocking/neo");
+        Future<HttpResponse<Buffer>> fr = request.send();
+        String response = fr.toCompletionStage().toCompletableFuture().get(10, TimeUnit.SECONDS).bodyAsString();
         Assertions.assertEquals(response, "Hello neo");
     }
 
     private Buffer buffer(String resource) {
-        try {
-            return Buffer.buffer(Files.readAllBytes(Path.of(resource)));
+        try (InputStream stream = getClass().getClassLoader().getResourceAsStream(resource)) {
+            return Buffer.buffer(stream.readAllBytes());
         } catch (IOException ioe) {
             throw new UncheckedIOException(ioe);
         }

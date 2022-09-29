@@ -30,6 +30,11 @@
             <artifactId>vertx-grpc-common</artifactId>
             <version>4.3.4-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web-client</artifactId>
+            <version>4.3.4-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -90,18 +95,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <groupId>io.quarkus</groupId>
