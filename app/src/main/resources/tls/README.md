@@ -5,8 +5,9 @@ The ca is self-signed:
 
 ```bash
 openssl req -x509 -new -newkey rsa:4096 -nodes -keyout ca.key -out ca.pem \
--config ca-openssl.cnf -days 3650 -extensions v3_req
+  -config ca-openssl.cnf -days 3650 -extensions v3_req
 ```
+
 
 When prompted for certificate information, everything is default.
 
@@ -44,6 +45,17 @@ openssl x509 -req -CA ca.pem -CAkey ca.key -CAcreateserial -in server.csr \
   -out server.pem -extfile server-openssl.cnf -days 3650
 ```
 
+Generate JKS file
+-----------------
+
+```bash
+openssl x509 -outform der -in ca.pem -out certificate.der
+keytool -import -alias localhost -keystore ca.jks -file certificate.der
+```
+
+When prompted, enter `123456` as password.
+When prompted, trus the certificate (enter `yes`).
+
 Cleanup
 -------
 
@@ -51,4 +63,5 @@ Cleanup
 rm *.rsa
 rm *.csr
 rm ca.srl
+rm *.der
 ```
