@@ -13,7 +13,7 @@ import io.quarkus.grpc.GrpcService;
 public class HelloService extends GreeterGrpc.GreeterImplBase {
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        responseObserver.onNext(HelloReply.newBuilder().setMessage("Hello " + request.getName() + "\n").build());
+        responseObserver.onNext(HelloReply.newBuilder().setMessage("Hello " + request.getName()).build());
         responseObserver.onCompleted();
     }
 }
