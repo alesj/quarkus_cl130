@@ -16,34 +16,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-grpc-client</artifactId>
-            <version>4.3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-grpc-server</artifactId>
-            <version>4.3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-grpc-common</artifactId>
-            <version>4.3.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-web-client</artifactId>
-            <version>4.3.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-grpc</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-xds</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.alesj</groupId>
             <artifactId>qcl-common</artifactId>
@@ -130,6 +111,37 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>jib</id>
+            <activation>
+                <property>
+                    <name>quarkus.container-image.tag</name>
+                </property>
+            </activation>
+            <properties>
+                <quarkus.container-image.build>true</quarkus.container-image.build>
+                <!--                <quarkus.container-image.registry>xyz</quarkus.container-image.registry>-->
+                <quarkus.container-image.group>alesj</quarkus.container-image.group>
+                <quarkus.container-image.push>true</quarkus.container-image.push>
+                <!--                <quarkus.container-image.tag>set on command line</quarkus.container-image.tag>-->
+                <quarkus.container-image.additional-tags>latest</quarkus.container-image.additional-tags>
+                <!--                <quarkus.container-image.username>set on command line</quarkus.container-image.username>-->
+                <!--                <quarkus.container-image.password>set on command line</quarkus.container-image.password>-->
+                <!--                <quarkus.jib.base-jvm-image>xyz</quarkus.jib.base-jvm-image>-->
+                <!--                <quarkus.jib.base-registry-username>set on command line</quarkus.jib.base-registry-username>-->
+                <!--                <quarkus.jib.base-registry-password>set on command line</quarkus.jib.base-registry-password>-->
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-container-image-jib</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+    </profiles>
 
 </project>
 

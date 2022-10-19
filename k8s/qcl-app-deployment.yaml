@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qcl-app
+  namespace: istio-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qcl-app
+  template:
+    metadata:
+      labels:
+        app: qcl-app
+    spec:
+      containers:
+        - name: qcl-app
+          image: "docker.io/alesj/qcl-app"
+          ports:
+            - name: grpc
+              containerPort: 30051
+              protocol: TCP
