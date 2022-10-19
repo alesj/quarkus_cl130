@@ -11,12 +11,15 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.net.PemKeyCertOptions;
 import io.vertx.core.net.PemTrustOptions;
 import io.vertx.core.net.SocketAddress;
 import io.vertx.grpc.client.GrpcClient;
 import io.vertx.grpc.client.GrpcClientChannel;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -30,10 +33,16 @@ public abstract class SimpleTestBase {
 
     abstract void close(Vertx vertx);
 
+    private InputStream stream(String resource) throws IOException {
+        return getClass().getClassLoader().getResourceAsStream(resource);
+    }
+
     @Test
     public void testSmoke() throws Exception {
         SslContextBuilder builder = GrpcSslContexts.forClient();
-        builder.trustManager(getClass().getClassLoader().getResourceAsStream("tls/ca.pem"));
+        builder.trustManager(stream("tls/ca.pem"));
+        builder.keyManager(stream("tls/client.pem"),
+            stream("tls/client.key"));
         SslContext context = builder.build();
 
         ManagedChannel channel = NettyChannelBuilder.forAddress("localhost", port())
@@ -58,10 +67,19 @@ public abstract class SimpleTestBase {
             options.setUseAlpn(true);
             options.setSsl(true);
             Buffer buffer;
-            try (InputStream stream = getClass().getClassLoader().getResourceAsStream("tls/ca.pem")) {
+            try (InputStream stream = stream("tls/ca.pem")) {
                 buffer = Buffer.buffer(stream.readAllBytes());
             }
+            Buffer cb;
+            try (InputStream stream = stream("tls/client.pem")) {
+                cb = Buffer.buffer(stream.readAllBytes());
+            }
+            Buffer ck;
+            try (InputStream stream = stream("tls/client.key")) {
+                ck = Buffer.buffer(stream.readAllBytes());
+            }
             options.setTrustOptions(new PemTrustOptions().addCertValue(buffer));
+            options.setKeyCertOptions(new PemKeyCertOptions().setCertValue(cb).setKeyValue(ck));
             GrpcClient client = GrpcClient.client(vertx, options);
             try {
                 GrpcClientChannel channel = new GrpcClientChannel(client, SocketAddress.inetSocketAddress(port(), "localhost"));

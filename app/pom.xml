@@ -18,22 +18,22 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-grpc-client</artifactId>
-            <version>4.3.4-SNAPSHOT</version>
+            <version>4.3.4</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-grpc-server</artifactId>
-            <version>4.3.4-SNAPSHOT</version>
+            <version>4.3.4</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-grpc-common</artifactId>
-            <version>4.3.4-SNAPSHOT</version>
+            <version>4.3.4</version>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web-client</artifactId>
-            <version>4.3.4-SNAPSHOT</version>
+            <version>4.3.4</version>
         </dependency>
 
         <dependency>
