@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import java.io.InputStream;
-import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,14 +29,6 @@ public class Configuration {
     private Server server;
 
     public void startServer(@Observes StartupEvent evt) throws Exception {
-        try (InputStream stream = getClass().getClassLoader().getResourceAsStream("bootstrap.json")) {
-            byte[] xdsBytes = stream.readAllBytes();
-            String xdsConfig = new String(xdsBytes);
-            String ip = InetAddress.getLocalHost().getHostAddress();
-            log.info("Current IP: {}", ip);
-            xdsConfig = xdsConfig.replace("${ip}", ip);
-            System.setProperty("io.grpc.xds.bootstrapConfig", xdsConfig);
-        }
         new Thread(() -> {
             try {
                 ServerCredentials credentials = InsecureServerCredentials.create();
