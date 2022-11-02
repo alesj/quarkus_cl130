@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qcl-client
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qcl-client
+  template:
+    metadata:
+      annotations:
+        inject.istio.io/templates: grpc-agent
+      labels:
+        app: qcl-client
+    spec:
+      containers:
+        - name: qcl-client
+          image: "docker.io/alesj/qcl-app"
+          env:
+            - name: XDS_TYPE
+              value: "CLIENT"
