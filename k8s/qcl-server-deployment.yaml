@@ -19,9 +19,6 @@ spec:
       containers:
         - name: qcl-app
           image: "docker.io/alesj/qcl-app:1.0.0-SNAPSHOT"
-#          env:
-#            - name: XDS_SECURE
-#              value: "true"
           ports:
             - name: grpc
               containerPort: 30051

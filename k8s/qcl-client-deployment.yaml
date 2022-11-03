@@ -18,10 +18,3 @@ spec:
       containers:
         - name: qcl-client
           image: "docker.io/alesj/qcl-app:1.0.0-SNAPSHOT"
-          env:
-            - name: XDS_TYPE
-              value: "CLIENT"
-            - name: XDS_TARGET
-              value: "xds:///qcl-app:30051"
-#            - name: XDS_SECURE
-#              value: "true"
