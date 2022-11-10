@@ -132,11 +132,16 @@
                 <!--                <quarkus.jib.base-jvm-image>xyz</quarkus.jib.base-jvm-image>-->
                 <!--                <quarkus.jib.base-registry-username>set on command line</quarkus.jib.base-registry-username>-->
                 <!--                <quarkus.jib.base-registry-password>set on command line</quarkus.jib.base-registry-password>-->
+                <quarkus.kubernetes.deploy>true</quarkus.kubernetes.deploy>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-container-image-jib</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-minikube</artifactId>
                 </dependency>
             </dependencies>
         </profile>
