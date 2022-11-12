@@ -30,7 +30,7 @@ public class Configuration {
     /**
      * Say hello to server.
      */
-    @Scheduled(every = "10s", delay = 10L, delayUnit = TimeUnit.SECONDS)
+    //@Scheduled(every = "10s", delay = 10L, delayUnit = TimeUnit.SECONDS)
     void greet() {
         log.info("Will try to greet " + user + " ...");
         String msg = user + "::" + ThreadLocalRandom.current().nextInt(100);
