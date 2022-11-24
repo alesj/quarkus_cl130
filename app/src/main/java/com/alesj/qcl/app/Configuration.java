@@ -39,7 +39,7 @@ public class Configuration {
         try {
             response = stub.sayHello(request);
         } catch (StatusRuntimeException e) {
-            log.warn("RPC failed: {}", e.getStatus());
+            log.warn("RPC failed:", e);
             return;
         }
         log.info("Greeting: " + response.getMessage());

@@ -1,19 +1,22 @@
 package com.alesj.qcl.app;
 
-import examples.GreeterGrpc;
+import examples.Greeter;
 import examples.HelloReply;
 import examples.HelloRequest;
-import io.grpc.stub.StreamObserver;
 import io.quarkus.grpc.GrpcService;
+import io.smallrye.mutiny.Uni;
+
+import javax.inject.Singleton;
 
 /**
  * @author Ales Justin
  */
 @GrpcService
-public class HelloService extends GreeterGrpc.GreeterImplBase {
+@Singleton
+public class HelloService implements Greeter {
     @Override
-    public void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-        responseObserver.onNext(HelloReply.newBuilder().setMessage("Hello " + request.getName()).build());
-        responseObserver.onCompleted();
+    public Uni<HelloReply> sayHello(HelloRequest request) {
+        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+        return Uni.createFrom().item(reply);
     }
 }
