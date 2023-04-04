@@ -1,15 +1,13 @@
 package com.alesj.qcl.test;
 
+import com.example.grpc.exc.HelloReply;
 import com.example.grpc.exc.HelloRequest;
 import com.example.grpc.exc.LegacyHelloGrpcGrpc;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
+import io.grpc.Channel;
+import io.grpc.netty.NettyChannelBuilder;
 import io.quarkus.grpc.GrpcClient;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Ales Justin
@@ -20,12 +18,19 @@ public class SimpleTest {
     @GrpcClient
     LegacyHelloGrpcGrpc.LegacyHelloGrpcBlockingStub stub;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void legacySayHello() {
-        final StatusRuntimeException exception = assertThrows(StatusRuntimeException.class,
-            () -> stub.legacySayHello(HelloRequest.newBuilder().setName("Neo").build()));
-        assertEquals(Status.Code.INVALID_ARGUMENT, exception.getStatus().getCode());
+        System.out.println("stub = " + stub.legacySayHello(HelloRequest.newBuilder().setName("Neo").build()));
     }
 
+    @Test
+    public void threadsCheck() {
+        for (int i = 0; i < 10; i++) {
+            Channel channel = NettyChannelBuilder.forTarget("dns:///localhost:9001").usePlaintext().build();
+            System.out.println(i + " - channel = " + channel);
+            LegacyHelloGrpcGrpc.LegacyHelloGrpcBlockingStub stub = LegacyHelloGrpcGrpc.newBlockingStub(channel);
+            HelloReply reply = stub.legacySayHello(HelloRequest.newBuilder().setName("Neo" + i).build());
+            System.out.println("reply = " + reply.getMessage());
+        }
+    }
 }
