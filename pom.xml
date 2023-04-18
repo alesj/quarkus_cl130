@@ -14,14 +14,14 @@
     <modules>
         <module>common</module>
         <module>app</module>
-        <module>engine</module>
+        <!-- module>engine</module -->
     </modules>
 
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- quarkus.version>999-SNAPSHOT</quarkus.version -->
-        <quarkus.version>2.16.6.Final</quarkus.version>
+        <quarkus.version>3.0.0.Final</quarkus.version>
         <jandex.version>1.2.3</jandex.version>
         <!-- Plugins -->
         <version.compiler.plugin>3.8.1</version.compiler.plugin>

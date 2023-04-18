@@ -1,4 +1,4 @@
-package com.alesj.qcl.app;
+package com.alesj.qcl.common;
 
 import com.example.grpc.exc.HelloReply;
 import com.example.grpc.exc.HelloRequest;

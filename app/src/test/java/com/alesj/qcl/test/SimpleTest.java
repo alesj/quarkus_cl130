@@ -26,7 +26,7 @@ public class SimpleTest {
     @Test
     public void threadsCheck() {
         for (int i = 0; i < 10; i++) {
-            Channel channel = NettyChannelBuilder.forTarget("dns:///localhost:9001").usePlaintext().build();
+            Channel channel = NettyChannelBuilder.forTarget("dns:///localhost:8081").usePlaintext().build();
             System.out.println(i + " - channel = " + channel);
             LegacyHelloGrpcGrpc.LegacyHelloGrpcBlockingStub stub = LegacyHelloGrpcGrpc.newBlockingStub(channel);
             HelloReply reply = stub.legacySayHello(HelloRequest.newBuilder().setName("Neo" + i).build());
