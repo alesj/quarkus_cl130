@@ -6,7 +6,7 @@ import examples.HelloRequest;
 import io.quarkus.grpc.GrpcService;
 import io.smallrye.mutiny.Uni;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * @author Ales Justin

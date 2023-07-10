@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-grpc</artifactId>
+            <artifactId>quarkus-grpc-xds</artifactId>
         </dependency>
 
         <dependency>
@@ -124,7 +124,7 @@
                 <quarkus.container-image.build>true</quarkus.container-image.build>
                 <!--                <quarkus.container-image.registry>xyz</quarkus.container-image.registry>-->
                 <quarkus.container-image.group>alesj</quarkus.container-image.group>
-                <quarkus.container-image.push>false</quarkus.container-image.push>
+                <quarkus.container-image.push>true</quarkus.container-image.push>
                 <!--                <quarkus.container-image.tag>set on command line</quarkus.container-image.tag>-->
                 <quarkus.container-image.additional-tags>latest</quarkus.container-image.additional-tags>
                 <!--                <quarkus.container-image.username>set on command line</quarkus.container-image.username>-->
