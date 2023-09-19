@@ -15,9 +15,29 @@
     <name>QCL App</name>
 
     <dependencies>
-        <dependency>
+        <!-- dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-grpc-xds</artifactId>
+        </dependency -->
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-mariadb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-narayana-jta</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
         </dependency>
 
         <dependency>
@@ -139,10 +159,12 @@
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-container-image-jib</artifactId>
                 </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-minikube</artifactId>
-                </dependency>
+                <!-- Workaround CNFE Quarkus issue - remove when fixed -->
+                <!-- dependency>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-api</artifactId>
+                    <scope>compile</scope>
+                </dependency -->
             </dependencies>
         </profile>
 
