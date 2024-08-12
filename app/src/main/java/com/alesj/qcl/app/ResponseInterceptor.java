@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Provider
@@ -62,7 +63,7 @@ public class ResponseInterceptor implements ContainerResponseFilter {
 
         @Override
         public void write(int b) throws IOException {
-            super.write(b);
+            out.write(b);
             if (b == '\n') {
                 var s = baos.toString(charset);
                 baos.reset();
@@ -73,13 +74,9 @@ public class ResponseInterceptor implements ContainerResponseFilter {
         }
 
         @Override
-        public void write(byte[] b) throws IOException {
-            write(b, 0, b.length);
-        }
-
-        @Override
         public void write(byte[] b, int off, int len) throws IOException {
-            super.write(b, off, len);
+            Objects.checkFromIndexSize(off, len, b.length);
+            out.write(b, off, len);
             int start = off;
             int end = off;
             while (end < off + len) {
@@ -108,6 +105,6 @@ public class ResponseInterceptor implements ContainerResponseFilter {
                 debugOutput.accept(s);
             }
         }
-    }
 
+    }
 }

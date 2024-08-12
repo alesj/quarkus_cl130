@@ -1,7 +1,5 @@
 package com.alesj.qcl.app;
 
-import io.quarkus.runtime.Quarkus;
-
 /**
  * @author Ales Justin
  */
