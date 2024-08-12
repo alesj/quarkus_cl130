@@ -1,22 +1,21 @@
 package com.alesj.qcl.app;
 
-import examples.Greeter;
-import examples.HelloReply;
-import examples.HelloRequest;
-import io.quarkus.grpc.GrpcService;
-import io.smallrye.mutiny.Uni;
-
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
 /**
  * @author Ales Justin
  */
-@GrpcService
-@Singleton
-public class HelloService implements Greeter {
-    @Override
-    public Uni<HelloReply> sayHello(HelloRequest request) {
-        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
-        return Uni.createFrom().item(reply);
+@ApplicationScoped
+@Path("/app")
+public class HelloService {
+
+    @GET
+    @Path("/dto")
+    public Dto dto() {
+        Dto dto = new Dto();
+        dto.setResponse("Test1");
+        return dto;
     }
 }

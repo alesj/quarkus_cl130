@@ -17,17 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-grpc-xds</artifactId>
+            <artifactId>quarkus-rest</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-scheduler</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alesj</groupId>
-            <artifactId>qcl-common</artifactId>
+            <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
 
         <dependency>
@@ -39,11 +33,6 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -114,38 +103,53 @@
 
     <profiles>
         <profile>
-            <id>jib</id>
+            <id>native</id>
             <activation>
                 <property>
-                    <name>quarkus.container-image.tag</name>
+                    <name>native</name>
                 </property>
+                <file>
+                    <missing>${basedir}/disable-native-profile</missing>
+                </file>
             </activation>
             <properties>
-                <quarkus.container-image.build>true</quarkus.container-image.build>
-                <!--                <quarkus.container-image.registry>xyz</quarkus.container-image.registry>-->
-                <quarkus.container-image.group>alesj</quarkus.container-image.group>
-                <quarkus.container-image.push>false</quarkus.container-image.push>
-                <!--                <quarkus.container-image.tag>set on command line</quarkus.container-image.tag>-->
-                <quarkus.container-image.additional-tags>latest</quarkus.container-image.additional-tags>
-                <!--                <quarkus.container-image.username>set on command line</quarkus.container-image.username>-->
-                <!--                <quarkus.container-image.password>set on command line</quarkus.container-image.password>-->
-                <!--                <quarkus.jib.base-jvm-image>xyz</quarkus.jib.base-jvm-image>-->
-                <!--                <quarkus.jib.base-registry-username>set on command line</quarkus.jib.base-registry-username>-->
-                <!--                <quarkus.jib.base-registry-password>set on command line</quarkus.jib.base-registry-password>-->
-                <quarkus.kubernetes.deploy>true</quarkus.kubernetes.deploy>
+                <quarkus.native.enabled>true</quarkus.native.enabled>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-container-image-jib</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-minikube</artifactId>
-                </dependency>
-            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <configuration>
+                                <skipTests>${native.surefire.skip}</skipTests>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                                <configuration>
+                                    <systemPropertyVariables>
+                                        <native.image.path>
+                                            ${project.build.directory}/${project.build.finalName}-runner
+                                        </native.image.path>
+                                    </systemPropertyVariables>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
-
     </profiles>
 
 </project>
