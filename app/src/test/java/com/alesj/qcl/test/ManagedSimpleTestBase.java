@@ -2,7 +2,7 @@ package com.alesj.qcl.test;
 
 import io.vertx.core.Vertx;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Ales Justin

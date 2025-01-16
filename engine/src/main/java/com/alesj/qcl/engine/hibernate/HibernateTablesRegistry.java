@@ -15,9 +15,9 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.transaction.jta.platform.spi.JtaPlatform;
 import org.hibernate.tool.schema.Action;
 
+import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.function.Function;
-import javax.sql.DataSource;
 
 /**
  * @author Ales Justin
